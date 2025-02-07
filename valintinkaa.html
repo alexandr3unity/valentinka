@@ -4,17 +4,21 @@
   <meta charset="UTF-8">
   <title>Валентинка - Анимация сердца</title>
   <style>
+    :root {
+      --heart-color: #ff3f3f;
+      --bg-gradient-start: #ff6b6b;
+      --bg-gradient-end: #ff8e8e;
+    }
     body {
       margin: 0;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
+      background: linear-gradient(45deg, var(--bg-gradient-start), var(--bg-gradient-end));
       font-family: 'Dancing Script', cursive;
       overflow: hidden;
     }
-
     .card {
       position: relative;
       width: 400px;
@@ -26,81 +30,66 @@
       text-align: center;
       overflow: hidden;
     }
-
-    /* Контейнер для анимации собирающегося сердца */
     .heart-assembly {
       position: relative;
       width: 200px;
       height: 200px;
       margin: 0 auto 20px;
     }
-
-    /* Стили для каждой маленькой частицы */
     .heart-piece {
       position: absolute;
       width: 6px;
       height: 6px;
-      background: #ff3f3f;
+      background: var(--heart-color);
       border-radius: 50%;
       opacity: 0;
       transition: transform 2s ease-out, opacity 2s ease-out;
     }
-
     h1 {
-      color: #ff3f3f;
+      color: var(--heart-color);
       font-size: 32px;
-      margin-top: 20px;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
-
     p {
       font-size: 24px;
       color: #555;
       line-height: 1.6;
     }
-
     .floating-hearts span {
       position: absolute;
-      color: #ff3f3f;
+      color: var(--heart-color);
       font-size: 24px;
       animation: float 6s linear infinite;
       opacity: 0;
     }
-
     @keyframes float {
       0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
       100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
     }
-
-    /* Анимация появления текста */
     @keyframes fadeInUp {
-      0% {
+      from {
         opacity: 0;
         transform: translateY(20px);
       }
-      100% {
+      to {
         opacity: 1;
         transform: translateY(0);
       }
     }
-
     /* Изначально скрываем текст */
     .card h1,
     .card p {
       opacity: 0;
     }
-
     /* Применяем анимацию с задержками */
     .card h1 {
       animation: fadeInUp 1s ease-out forwards;
       animation-delay: 2.5s;
     }
-
     .card p:nth-of-type(1) {
       animation: fadeInUp 1s ease-out forwards;
       animation-delay: 3s;
     }
-
     .card p:nth-of-type(2) {
       animation: fadeInUp 1s ease-out forwards;
       animation-delay: 3.5s;
@@ -110,9 +99,7 @@
 </head>
 <body>
   <div class="floating-hearts"></div>
-  
   <div class="card">
-    <!-- Контейнер для анимации собирающегося сердца -->
     <div class="heart-assembly"></div>
     <h1>С Днём Влюблённых!</h1>
     <p>Пусть этот день наполнит твоё сердце теплом, нежностью и бесконечным счастьем! Ты — самое прекрасное, что случалось со мной! 💖</p>
@@ -120,63 +107,54 @@
   </div>
 
   <script>
-    // Функция для создания плавающих сердечек в фоне
+    // Создание плавающих сердечек в фоне с использованием DocumentFragment
     function createFloatingHearts() {
       const container = document.querySelector('.floating-hearts');
+      const fragment = document.createDocumentFragment();
       for (let i = 0; i < 15; i++) {
         const heart = document.createElement('span');
-        heart.innerHTML = '❤';
+        heart.textContent = '❤';
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.animationDelay = Math.random() * 6 + 's';
-        container.appendChild(heart);
+        fragment.appendChild(heart);
       }
+      container.appendChild(fragment);
     }
 
-    // Функция для сборки сердца из маленьких частиц
+    // Сборка сердца из частиц
     function assembleHeart() {
       const container = document.querySelector('.heart-assembly');
+      const fragment = document.createDocumentFragment();
       const pieces = [];
-      const pieceSize = 6; // размер одной частицы
+      const pieceSize = 6;
       const containerWidth = container.offsetWidth;
       const containerHeight = container.offsetHeight;
-      
-      // Увеличиваем разрешение сетки для получения большего количества частиц
-      const gridSteps = 100; 
-      const domainX = 3; // диапазон по оси X (-1.5 ... 1.5)
-      const domainY = 3; // диапазон по оси Y (-1.5 ... 1.5)
+      const gridSteps = 100;
+      const domainX = 3;
+      const domainY = 3;
 
       for (let i = 0; i <= gridSteps; i++) {
         for (let j = 0; j <= gridSteps; j++) {
-          // Преобразуем индексы в координаты в диапазоне [-1.5, 1.5]
-          let x = (i / gridSteps) * domainX - domainX / 2;
-          let y = (j / gridSteps) * domainY - domainY / 2;
-
-          // Условие для попадания точки внутрь математического сердца:
-          // (x²+y²-1)³ - x²·y³ ≤ 0
+          const x = (i / gridSteps) * domainX - domainX / 2;
+          const y = (j / gridSteps) * domainY - domainY / 2;
           if (Math.pow(x * x + y * y - 1, 3) - x * x * Math.pow(y, 3) <= 0) {
-            // Преобразование координат из математического пространства в координаты контейнера
-            let finalLeft = ((x + domainX / 2) / domainX) * (containerWidth - pieceSize);
-            let finalTop = ((domainY / 2 - y) / domainY) * (containerHeight - pieceSize);
-
+            const finalLeft = ((x + domainX / 2) / domainX) * (containerWidth - pieceSize);
+            const finalTop = ((domainY / 2 - y) / domainY) * (containerHeight - pieceSize);
             const piece = document.createElement('div');
-            piece.classList.add('heart-piece');
+            piece.className = 'heart-piece';
             piece.style.left = finalLeft + 'px';
             piece.style.top = finalTop + 'px';
-
-            // Задаём начальное случайное положение частицы
-            let randomX = (Math.random() - 0.5) * containerWidth * 2;
-            let randomY = (Math.random() - 0.5) * containerHeight * 2;
+            const randomX = (Math.random() - 0.5) * containerWidth * 2;
+            const randomY = (Math.random() - 0.5) * containerHeight * 2;
             piece.style.transform = `translate(${randomX}px, ${randomY}px)`;
-            // Случайная задержка для более естественного эффекта
             piece.style.transitionDelay = Math.random() * 0.5 + 's';
-
-            container.appendChild(piece);
+            fragment.appendChild(piece);
             pieces.push(piece);
           }
         }
       }
-
-      // Запуск анимации: частицы перемещаются на свои места, формируя сердце
+      container.appendChild(fragment);
+      // Запуск анимации перемещения частиц в нужное положение
       setTimeout(() => {
         pieces.forEach(piece => {
           piece.style.transform = 'translate(0, 0)';

@@ -2,261 +2,158 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <!-- Мета-тег для адаптации под мобильные устройства -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Валентинка - Анимация сердца</title>
+  <title>Валентинка - Переплетающиеся сердца</title>
   <style>
-    :root {
-      --heart-color: #ff3f3f;
-      --bg-gradient-start: #ff6b6b;
-      --bg-gradient-end: #ff8e8e;
-    }
-    /* Фоновая анимация градиента */
-    @keyframes bgAnimation {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    /* Анимация появления карточки */
-    @keyframes cardIn {
-      from {
-        opacity: 0;
-        transform: scale(0.95);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    /* Анимация пульсации сердца */
-    @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    /* Анимация поворота (покачивания) для контейнера с сердцем */
-    @keyframes rotateHeart {
-      0% { transform: rotate(0deg); }
-      50% { transform: rotate(3deg); }
-      100% { transform: rotate(0deg); }
-    }
-    /* Анимация свечения для заголовка */
-    @keyframes glow {
-      0%, 100% { text-shadow: 0 0 5px var(--heart-color); }
-      50% { text-shadow: 0 0 15px var(--heart-color); }
-    }
-    /* Модифицированная анимация плавающих сердечек с масштабированием */
-    @keyframes float {
-      0% {
-        transform: translateY(100vh) rotate(0deg) scale(0.8);
-        opacity: 1;
-      }
-      50% {
-        transform: translateY(50vh) rotate(180deg) scale(1.2);
-        opacity: 0.5;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(360deg) scale(0.8);
-        opacity: 0;
-      }
-    }
-    /* Анимация появления текста */
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
     body {
       margin: 0;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      /* Фоновый градиент с анимацией */
-      background: linear-gradient(45deg, var(--bg-gradient-start), var(--bg-gradient-end));
-      background-size: 200% 200%;
-      animation: bgAnimation 20s ease infinite;
+      background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
       font-family: 'Dancing Script', cursive;
       overflow: hidden;
     }
+
     .card {
       position: relative;
       width: 90%;
       max-width: 400px;
+      height: auto;
       background: #fff;
       border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-      padding: 40px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      padding: 30px;
       text-align: center;
-      overflow: hidden;
-      /* Плавное появление карточки */
-      opacity: 0;
-      animation: cardIn 0.8s ease-out forwards;
-      animation-delay: 0.5s;
-      /* Высота подстраивается под содержимое */
-      height: auto;
     }
-    /* Контейнер для поворота сердца */
+
     .heart-container {
-      display: inline-block;
-      animation: rotateHeart 3s infinite;
-    }
-    /* Блок, где собирается сердце */
-    .heart-assembly {
       position: relative;
       width: 200px;
       height: 200px;
       margin: 0 auto 20px;
     }
-    /* При добавлении класса .heartbeat блок с сердцем начинает пульсировать */
-    .heart-assembly.heartbeat {
-      animation: heartbeat 1.5s infinite;
-    }
-    .heart-piece {
+
+    .heart {
       position: absolute;
-      width: 6px;
-      height: 6px;
-      background: var(--heart-color);
+      width: 80px;
+      height: 80px;
+      background-color: red;
+      transform: rotate(-45deg);
+      top: 50%;
+      left: 50%;
+      animation: moveHeart 4s infinite ease-in-out;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      background-color: red;
       border-radius: 50%;
-      opacity: 0;
-      transition: transform 2s ease-out, opacity 2s ease-out;
     }
+
+    .heart::before {
+      top: -40px;
+      left: 0;
+    }
+
+    .heart::after {
+      left: -40px;
+      top: 0;
+    }
+
+    .heart.second {
+      background-color: pink;
+      animation: moveHeart2 4s infinite ease-in-out;
+    }
+
+    .heart.second::before,
+    .heart.second::after {
+      background-color: pink;
+    }
+
+    @keyframes moveHeart {
+      0% { transform: translateX(0px) translateY(0px) rotate(-45deg); }
+      25% { transform: translateX(30px) translateY(-20px) rotate(-45deg); }
+      50% { transform: translateX(0px) translateY(-40px) rotate(-45deg); }
+      75% { transform: translateX(-30px) translateY(-20px) rotate(-45deg); }
+      100% { transform: translateX(0px) translateY(0px) rotate(-45deg); }
+    }
+
+    @keyframes moveHeart2 {
+      0% { transform: translateX(0px) translateY(0px) rotate(-45deg); }
+      25% { transform: translateX(-30px) translateY(20px) rotate(-45deg); }
+      50% { transform: translateX(0px) translateY(40px) rotate(-45deg); }
+      75% { transform: translateX(30px) translateY(20px) rotate(-45deg); }
+      100% { transform: translateX(0px) translateY(0px) rotate(-45deg); }
+    }
+
     h1 {
-      color: var(--heart-color);
-      font-size: 32px;
-      margin: 20px 0;
-      opacity: 0;
-      animation: fadeInUp 1s ease-out forwards;
-      animation-delay: 2.5s;
+      color: #ff3f3f;
+      font-size: 28px;
+      margin-top: 10px;
+      margin-bottom: 15px;
+      animation: fadeIn 2s ease-in-out;
     }
-    /* Класс для свечения заголовка */
-    .glowing {
-      animation: glow 2s ease-in-out infinite;
-    }
+
     p {
-      font-size: 24px;
+      font-size: 20px;
       color: #555;
       line-height: 1.6;
-      opacity: 0;
-      animation: fadeInUp 1s ease-out forwards;
+      animation: fadeIn 3s ease-in-out;
     }
-    .card p:nth-of-type(1) {
-      animation-delay: 3s;
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
-    .card p:nth-of-type(2) {
-      animation-delay: 3.5s;
-    }
+
     .floating-hearts span {
       position: absolute;
-      color: var(--heart-color);
-      font-size: 24px;
+      color: #ff3f3f;
+      font-size: 20px;
       animation: float 6s linear infinite;
       opacity: 0;
     }
-    /* Медиазапрос для мобильных устройств */
-    @media (max-width: 480px) {
-      .card {
-        padding: 20px;
-      }
-      .heart-assembly {
-        width: 150px;
-        height: 150px;
-        margin: 0 auto 15px;
-      }
-      h1 {
-        font-size: 28px;
-        margin: 15px 0;
-      }
-      p {
-        font-size: 18px;
-      }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
     }
+
   </style>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="floating-hearts"></div>
+  
   <div class="card">
-    <!-- Контейнер для анимации поворота сердца -->
     <div class="heart-container">
-      <!-- Контейнер для сборки сердца из частиц -->
-      <div class="heart-assembly"></div>
+      <div class="heart"></div>
+      <div class="heart second"></div>
     </div>
     <h1>С Днём Влюблённых!</h1>
     <p>Пусть этот день наполнит твоё сердце теплом, нежностью и бесконечным счастьем! Ты — самое прекрасное, что случалось со мной! 💖</p>
-    <p style="margin-top: 20px;">С любовью, саша</p>
+    <p style="margin-top: 20px;">С любовью, Саша</p>
   </div>
 
   <script>
-    // Создание плавающих сердечек (количество уменьшено для оптимизации)
     function createFloatingHearts() {
       const container = document.querySelector('.floating-hearts');
-      const fragment = document.createDocumentFragment();
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 10; i++) { 
         const heart = document.createElement('span');
-        heart.textContent = '❤';
+        heart.innerHTML = '❤';
         heart.style.left = Math.random() * 100 + 'vw';
         heart.style.animationDelay = Math.random() * 6 + 's';
-        fragment.appendChild(heart);
+        container.appendChild(heart);
       }
-      container.appendChild(fragment);
-    }
-
-    // Сборка сердца из частиц с уменьшенным количеством шагов для мобильных устройств
-    function assembleHeart() {
-      const container = document.querySelector('.heart-assembly');
-      const fragment = document.createDocumentFragment();
-      const pieces = [];
-      const pieceSize = 6;
-      const containerWidth = container.offsetWidth;
-      const containerHeight = container.offsetHeight;
-      const gridSteps = 40; // уменьшено для повышения производительности
-      const domainX = 3;
-      const domainY = 3;
-
-      for (let i = 0; i <= gridSteps; i++) {
-        for (let j = 0; j <= gridSteps; j++) {
-          const x = (i / gridSteps) * domainX - domainX / 2;
-          const y = (j / gridSteps) * domainY - domainY / 2;
-          if (Math.pow(x * x + y * y - 1, 3) - x * x * Math.pow(y, 3) <= 0) {
-            const finalLeft = ((x + domainX / 2) / domainX) * (containerWidth - pieceSize);
-            const finalTop = ((domainY / 2 - y) / domainY) * (containerHeight - pieceSize);
-            const piece = document.createElement('div');
-            piece.className = 'heart-piece';
-            piece.style.left = finalLeft + 'px';
-            piece.style.top = finalTop + 'px';
-            const randomX = (Math.random() - 0.5) * containerWidth * 2;
-            const randomY = (Math.random() - 0.5) * containerHeight * 2;
-            piece.style.transform = `translate(${randomX}px, ${randomY}px)`;
-            piece.style.transitionDelay = Math.random() * 0.5 + 's';
-            fragment.appendChild(piece);
-            pieces.push(piece);
-          }
-        }
-      }
-      container.appendChild(fragment);
-      // Запуск анимации: частицы перемещаются в нужное положение, формируя сердце
-      setTimeout(() => {
-        pieces.forEach(piece => {
-          piece.style.transform = 'translate(0, 0)';
-          piece.style.opacity = 1;
-        });
-        // После сборки добавляем класс для пульсации сердца
-        container.classList.add('heartbeat');
-      }, 100);
     }
 
     createFloatingHearts();
-    assembleHeart();
-
-    // Добавляем свечение заголовку после завершения его появления
-    setTimeout(() => {
-      document.querySelector('h1').classList.add('glowing');
-    }, 3500);
   </script>
 </body>
 </html>

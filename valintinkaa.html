@@ -21,6 +21,26 @@
       font-family: 'Dancing Script', cursive;
       overflow: hidden;
     }
+    /* Анимация появления карточки */
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    /* Анимация «биения сердца» */
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
     .card {
       position: relative;
       width: 90%;
@@ -31,7 +51,11 @@
       padding: 40px;
       text-align: center;
       overflow: hidden;
-      /* Автоматическая высота под контент */
+      /* Карточка плавно появляется */
+      opacity: 0;
+      animation: cardIn 0.8s ease-out forwards;
+      animation-delay: 0.5s;
+      /* Высота подстраивается под содержимое */
       height: auto;
     }
     .heart-assembly {
@@ -39,6 +63,10 @@
       width: 200px;
       height: 200px;
       margin: 0 auto 20px;
+    }
+    /* При добавлении класса .heartbeat контейнер с сердцем будет «биться» */
+    .heart-assembly.heartbeat {
+      animation: heartbeat 1.5s infinite;
     }
     .heart-piece {
       position: absolute;
@@ -139,7 +167,7 @@
     function createFloatingHearts() {
       const container = document.querySelector('.floating-hearts');
       const fragment = document.createDocumentFragment();
-      // Уменьшено количество плавающих сердечек
+      // Уменьшено количество плавающих сердечек для повышения производительности
       for (let i = 0; i < 8; i++) {
         const heart = document.createElement('span');
         heart.textContent = '❤';
@@ -190,6 +218,8 @@
           piece.style.transform = 'translate(0, 0)';
           piece.style.opacity = 1;
         });
+        // После сборки добавляем класс для анимации «биения сердца»
+        container.classList.add('heartbeat');
       }, 100);
     }
 

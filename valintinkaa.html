@@ -13,7 +13,7 @@
     }
     body {
       margin: 0;
-      height: 55vh;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -139,7 +139,8 @@
     function createFloatingHearts() {
       const container = document.querySelector('.floating-hearts');
       const fragment = document.createDocumentFragment();
-      for (let i = 0; i < 15; i++) {
+      // Уменьшено количество плавающих сердечек
+      for (let i = 0; i < 8; i++) {
         const heart = document.createElement('span');
         heart.textContent = '❤';
         heart.style.left = Math.random() * 100 + 'vw';
@@ -157,7 +158,8 @@
       const pieceSize = 6;
       const containerWidth = container.offsetWidth;
       const containerHeight = container.offsetHeight;
-      const gridSteps = 100;
+      // Уменьшено количество шагов сетки для снижения нагрузки (меньше частиц)
+      const gridSteps = 40;
       const domainX = 3;
       const domainY = 3;
 

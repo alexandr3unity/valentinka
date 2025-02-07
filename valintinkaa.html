@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Валентинка - Переплетающиеся сердца</title>
+  <title>Любовная анимация</title>
   <style>
     body {
       margin: 0;
@@ -12,27 +12,13 @@
       justify-content: center;
       align-items: center;
       background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-      font-family: 'Dancing Script', cursive;
       overflow: hidden;
     }
 
-    .card {
+    .container {
       position: relative;
-      width: 90%;
-      max-width: 400px;
-      height: auto;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-      padding: 30px;
-      text-align: center;
-    }
-
-    .heart-container {
-      position: relative;
-      width: 200px;
+      width: 300px;
       height: 200px;
-      margin: 0 auto 20px;
     }
 
     .heart {
@@ -40,10 +26,9 @@
       width: 80px;
       height: 80px;
       background-color: red;
-      transform: rotate(45deg); /* Повернули сердце на 90 градусов */
+      transform: rotate(45deg);
       top: 50%;
-      left: 50%;
-      animation: moveHeart 4s infinite ease-in-out;
+      transition: all 2s ease-in-out;
     }
 
     .heart::before,
@@ -66,94 +51,131 @@
       top: 0;
     }
 
-    .heart.second {
-      background-color: pink;
-      animation: moveHeart2 4s infinite ease-in-out;
+    .heart.left {
+      left: 0;
+      animation: moveLeftHeart 3s forwards ease-in-out;
     }
 
-    .heart.second::before,
-    .heart.second::after {
-      background-color: pink;
+    .heart.right {
+      right: 0;
+      animation: moveRightHeart 3s forwards ease-in-out;
     }
 
-    @keyframes moveHeart {
-      0% { transform: translateX(0px) translateY(0px) rotate(45deg); }
-      25% { transform: translateX(30px) translateY(-20px) rotate(45deg); }
-      50% { transform: translateX(0px) translateY(-40px) rotate(45deg); }
-      75% { transform: translateX(-30px) translateY(-20px) rotate(45deg); }
-      100% { transform: translateX(0px) translateY(0px) rotate(45deg); }
+    @keyframes moveLeftHeart {
+      0% { transform: translateX(0) rotate(45deg); }
+      50% { transform: translateX(100px) rotate(45deg); }
+      100% { transform: translateX(130px) scale(0) rotate(45deg); }
     }
 
-    @keyframes moveHeart2 {
-      0% { transform: translateX(0px) translateY(0px) rotate(45deg); }
-      25% { transform: translateX(-30px) translateY(20px) rotate(45deg); }
-      50% { transform: translateX(0px) translateY(40px) rotate(45deg); }
-      75% { transform: translateX(30px) translateY(20px) rotate(45deg); }
-      100% { transform: translateX(0px) translateY(0px) rotate(45deg); }
+    @keyframes moveRightHeart {
+      0% { transform: translateX(0) rotate(45deg); }
+      50% { transform: translateX(-100px) rotate(45deg); }
+      100% { transform: translateX(-130px) scale(0) rotate(45deg); }
     }
 
-    h1 {
-      color: #ff3f3f;
-      font-size: 28px;
-      margin-top: 10px;
-      margin-bottom: 15px;
-      animation: fadeIn 2s ease-in-out;
-    }
-
-    p {
-      font-size: 20px;
-      color: #555;
-      line-height: 1.6;
-      animation: fadeIn 3s ease-in-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .floating-hearts span {
+    /* Частицы после разрушения сердец */
+    .particles {
       position: absolute;
-      color: #ff3f3f;
-      font-size: 20px;
-      animation: float 6s linear infinite;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
       opacity: 0;
     }
 
-    @keyframes float {
-      0% { transform: translateY(100vh) rotate(0deg); opacity: 1; }
-      100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+    .particle {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: red;
+      border-radius: 50%;
+      opacity: 0;
+      transform: scale(0);
     }
 
+    /* Анимация разлета частиц */
+    @keyframes explode {
+      0% { transform: scale(1) translate(0, 0); opacity: 1; }
+      100% { transform: scale(0.5) translate(var(--x), var(--y)); opacity: 0; }
+    }
+
+    /* Большое сердце */
+    .big-heart {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      transform: rotate(45deg) scale(0);
+      top: 50%;
+      left: 50%;
+      opacity: 0;
+      transition: transform 2s ease-in-out, opacity 2s ease-in-out;
+    }
+
+    .big-heart::before,
+    .big-heart::after {
+      content: '';
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      border-radius: 50%;
+    }
+
+    .big-heart::before {
+      top: -50px;
+      left: 0;
+    }
+
+    .big-heart::after {
+      left: -50px;
+      top: 0;
+    }
   </style>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="floating-hearts"></div>
-  
-  <div class="card">
-    <div class="heart-container">
-      <div class="heart"></div>
-      <div class="heart second"></div>
-    </div>
-    <h1>С Днём Влюблённых!</h1>
-    <p>Пусть этот день наполнит твоё сердце теплом, нежностью и бесконечным счастьем! Ты — самое прекрасное, что случалось со мной! 💖</p>
-    <p style="margin-top: 20px;">С любовью, Саша</p>
+
+  <div class="container">
+    <div class="heart left"></div>
+    <div class="heart right"></div>
+    <div class="particles"></div>
+    <div class="big-heart"></div>
   </div>
 
   <script>
-    function createFloatingHearts() {
-      const container = document.querySelector('.floating-hearts');
-      for (let i = 0; i < 10; i++) { 
-        const heart = document.createElement('span');
-        heart.innerHTML = '❤';
-        heart.style.left = Math.random() * 100 + 'vw';
-        heart.style.animationDelay = Math.random() * 6 + 's';
-        container.appendChild(heart);
-      }
+    const leftHeart = document.querySelector('.heart.left');
+    const rightHeart = document.querySelector('.heart.right');
+    const particlesContainer = document.querySelector('.particles');
+    const bigHeart = document.querySelector('.big-heart');
+
+    // Создаём частицы
+    for (let i = 0; i < 30; i++) {
+      let particle = document.createElement('div');
+      particle.classList.add('particle');
+      let angle = Math.random() * 2 * Math.PI;
+      let distance = Math.random() * 80 + 20;
+      particle.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
+      particle.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
+      particlesContainer.appendChild(particle);
     }
 
-    createFloatingHearts();
+    setTimeout(() => {
+      leftHeart.style.opacity = '0';
+      rightHeart.style.opacity = '0';
+      document.querySelectorAll('.particle').forEach(p => {
+        p.style.animation = 'explode 1s forwards ease-out';
+        p.style.opacity = '1';
+      });
+
+      setTimeout(() => {
+        particlesContainer.style.opacity = '0';
+        bigHeart.style.transform = 'translate(-50%, -50%) scale(1)';
+        bigHeart.style.opacity = '1';
+      }, 1000);
+    }, 3000);
   </script>
+
 </body>
 </html>

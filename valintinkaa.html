@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Любовная анимация</title>
+  <title>Разбивающиеся сердца</title>
   <style>
     body {
       margin: 0;
@@ -101,38 +101,6 @@
       100% { transform: scale(0.5) translate(var(--x), var(--y)); opacity: 0; }
     }
 
-    /* Большое сердце */
-    .big-heart {
-      position: absolute;
-      width: 100px;
-      height: 100px;
-      background-color: red;
-      transform: rotate(45deg) scale(0);
-      top: 50%;
-      left: 50%;
-      opacity: 0;
-      transition: transform 2s ease-in-out, opacity 2s ease-in-out;
-    }
-
-    .big-heart::before,
-    .big-heart::after {
-      content: '';
-      position: absolute;
-      width: 100px;
-      height: 100px;
-      background-color: red;
-      border-radius: 50%;
-    }
-
-    .big-heart::before {
-      top: -50px;
-      left: 0;
-    }
-
-    .big-heart::after {
-      left: -50px;
-      top: 0;
-    }
   </style>
 </head>
 <body>
@@ -141,21 +109,19 @@
     <div class="heart left"></div>
     <div class="heart right"></div>
     <div class="particles"></div>
-    <div class="big-heart"></div>
   </div>
 
   <script>
     const leftHeart = document.querySelector('.heart.left');
     const rightHeart = document.querySelector('.heart.right');
     const particlesContainer = document.querySelector('.particles');
-    const bigHeart = document.querySelector('.big-heart');
 
     // Создаём частицы
-    for (let i = 0; i < 30; i++) {
+    for (let i = 0; i < 50; i++) {
       let particle = document.createElement('div');
       particle.classList.add('particle');
       let angle = Math.random() * 2 * Math.PI;
-      let distance = Math.random() * 80 + 20;
+      let distance = Math.random() * 100 + 20;
       particle.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
       particle.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
       particlesContainer.appendChild(particle);
@@ -164,16 +130,12 @@
     setTimeout(() => {
       leftHeart.style.opacity = '0';
       rightHeart.style.opacity = '0';
+      particlesContainer.style.opacity = '1';
+
       document.querySelectorAll('.particle').forEach(p => {
         p.style.animation = 'explode 1s forwards ease-out';
         p.style.opacity = '1';
       });
-
-      setTimeout(() => {
-        particlesContainer.style.opacity = '0';
-        bigHeart.style.transform = 'translate(-50%, -50%) scale(1)';
-        bigHeart.style.opacity = '1';
-      }, 1000);
     }, 3000);
   </script>
 

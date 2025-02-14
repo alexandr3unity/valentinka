@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Heart Particle Animation</title>
+    <meta name="viewport" content="width=device-scale=1.0">
+    <title>Heart of Particles</title>
     <style>
         body {
             margin: 0;
@@ -35,9 +35,15 @@
             return { x, y };
         }
 
+        // Проверка, находится ли точка внутри сердца
+        function isInsideHeart(x, y) {
+            // Определяем, внутри ли точки сердечной области, используя ограничение по x и y.
+            return y >= -16 * Math.pow(Math.sin(x), 3) && y <= 13 * Math.cos(x) - 5 * Math.cos(2 * x) - 2 * Math.cos(3 * x) - Math.cos(4 * x);
+        }
+
         // Генерация частиц внутри сердца
         function generateParticles() {
-            const totalParticles = 2000;
+            const totalParticles = 3000;
             const particlesContainer = document.body;
 
             // Генерация частиц по всему внутреннему объему сердца
@@ -46,17 +52,24 @@
                 particle.classList.add('particle');
                 particlesContainer.appendChild(particle);
 
-                // Генерируем случайный угол для каждого положения
-                const t = Math.random() * Math.PI * 2;
-                const { x, y } = heartShape(t);
+                let validPosition = false;
+                let x, y;
+                // Ищем позицию внутри сердца
+                while (!validPosition) {
+                    const t = Math.random() * Math.PI * 2; // Генерация случайного угла
+                    const coords = heartShape(t);
+                    x = coords.x * 10 + window.innerWidth / 2; // Масштабирование
+                    y = coords.y * 10 + window.innerHeight / 2; // Масштабирование
 
-                // Масштабируем координаты для лучшего отображения на экране
-                const offsetX = (x * 10) + window.innerWidth / 2;
-                const offsetY = (y * 10) + window.innerHeight / 2;
+                    // Проверка, находится ли точка внутри сердца
+                    if (isInsideHeart(x, y)) {
+                        validPosition = true;
+                    }
+                }
 
                 // Устанавливаем позицию каждой частицы
-                particle.style.left = `${offsetX}px`;
-                particle.style.top = `${offsetY}px`;
+                particle.style.left = `${x}px`;
+                particle.style.top = `${y}px`;
             }
         }
 

@@ -19,37 +19,47 @@
 <body>
 
     <!-- Новое изображение сердца -->
-    <img id="valentines" src="https://i.imgur.com/8GZ3P8G.png">
+    <img id="valentines" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Red_heart_icon.svg/1200px-Red_heart_icon.svg.png">
 
     <script>
-        // Настройки анимации
-        const settings = {
-            particleGap: 2,      // Плотность частиц
-            particleSize: 1.5,   // Размер частиц
-            mouseForce: 50,      // Влияние мыши
-            noise: 15,           // Случайное движение частиц
-            layerCount: 3,       // Количество слоев
-            layerDistance: 5     // Расстояние между слоями
+        // Ожидаем загрузку изображения перед запуском анимации
+        window.onload = function() {
+            // Проверяем, что изображение загрузилось
+            const img = document.querySelector('#valentines');
+            if (!img.complete) {
+                console.error("Ошибка загрузки изображения!");
+                return;
+            }
+
+            // Настройки анимации
+            const settings = {
+                particleGap: 2,      // Плотность частиц
+                particleSize: 1.5,   // Размер частиц
+                mouseForce: 50,      // Влияние мыши
+                noise: 15,           // Случайное движение частиц
+                layerCount: 3,       // Количество слоев
+                layerDistance: 5     // Расстояние между слоями
+            };
+
+            // Создаем сердце из частиц
+            const heart = new NextParticle({
+                renderer: 'webgl',
+                image: img,
+                width: window.innerWidth,
+                height: window.innerHeight,
+                particleGap: settings.particleGap,
+                particleSize: settings.particleSize,
+                mouseForce: settings.mouseForce,
+                noise: settings.noise,
+                layerCount: settings.layerCount,
+                layerDistance: settings.layerDistance
+            });
+
+            // Автообновление при изменении размера окна
+            window.addEventListener('resize', () => {
+                heart.setSize(window.innerWidth, window.innerHeight);
+            });
         };
-
-        // Создаем сердце из частиц
-        const heart = new NextParticle({
-            renderer: 'webgl',
-            image: document.querySelector('#valentines'),
-            width: window.innerWidth,
-            height: window.innerHeight,
-            particleGap: settings.particleGap,
-            particleSize: settings.particleSize,
-            mouseForce: settings.mouseForce,
-            noise: settings.noise,
-            layerCount: settings.layerCount,
-            layerDistance: settings.layerDistance
-        });
-
-        // Автообновление при изменении размера окна
-        window.addEventListener('resize', () => {
-            heart.setSize(window.innerWidth, window.innerHeight);
-        });
     </script>
 
 </body>

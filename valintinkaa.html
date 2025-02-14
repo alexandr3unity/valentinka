@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Red Heart Particles</title>
+    <title>Heart Particle Animation</title>
     <style>
         body {
             margin: 0;
+            padding: 0;
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -14,59 +15,50 @@
             background-color: #f0f0f0;
             overflow: hidden;
         }
-
         .particle {
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background-color: red;
-            animation: moveParticle 3s infinite;
-        }
-
-        @keyframes moveParticle {
-            0% {
-                transform: translate(0, 0);
-            }
-            100% {
-                transform: translate(var(--x), var(--y));
-            }
+            opacity: 0.8;
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-    <div id="heart"></div>
-    
     <script>
-        const heartShape = (t) => {
+        // Функция для формирования координат сердца
+        function heartShape(t) {
             const x = 16 * Math.pow(Math.sin(t), 3);
-            const y = 13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t);
+            const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
             return { x, y };
-        };
+        }
 
-        const generateParticles = () => {
-            const particlesContainer = document.getElementById('heart');
-            const totalParticles = 500;
-            const radius = 200;
+        // Генерация частиц
+        function generateParticles() {
+            const totalParticles = 1000;
+            const particlesContainer = document.body;
 
             for (let i = 0; i < totalParticles; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 particlesContainer.appendChild(particle);
 
-                const t = Math.random() * Math.PI * 2;
+                const t = (i / totalParticles) * Math.PI * 2; // Равномерное распределение
                 const { x, y } = heartShape(t);
 
-                const offsetX = x * radius + window.innerWidth / 2;
-                const offsetY = y * radius + window.innerHeight / 2;
+                // Масштабируем координаты для лучшего отображения на экране
+                const offsetX = (x * 10) + window.innerWidth / 2;
+                const offsetY = (y * 10) + window.innerHeight / 2;
 
-                particle.style.setProperty('--x', `${Math.random() * 100 - 50}px`);
-                particle.style.setProperty('--y', `${Math.random() * 100 - 50}px`);
+                // Устанавливаем позицию каждой частицы
                 particle.style.left = `${offsetX}px`;
                 particle.style.top = `${offsetY}px`;
             }
-        };
+        }
 
+        // Запуск функции для генерации частиц
         generateParticles();
     </script>
 </body>

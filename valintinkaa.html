@@ -3,13 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Парящие сердечки</title>
+    <title>Сердце из частиц</title>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <style>
         body {
             margin: 0;
             overflow: hidden;
             background-color: black;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         #particles-js {
             position: absolute;
@@ -26,38 +30,32 @@
         particlesJS("particles-js", {
             "particles": {
                 "number": {
-                    "value": 60, 
+                    "value": 300, 
                     "density": {
                         "enable": true,
                         "value_area": 800
                     }
                 },
                 "color": {
-                    "value": "#ff0000" // Красный цвет сердечек
+                    "value": "#ff0000" // Красный цвет частиц
                 },
                 "shape": {
-                    "type": "char", 
-                    "character": {
-                        "value": "❤",  // Символ сердечка
-                        "font": "Arial",
-                        "style": "normal",
-                        "weight": "bold",
-                        "fill": true
-                    }
+                    "type": "circle", // Частицы - кружочки
                 },
                 "opacity": {
-                    "value": 0.8,
+                    "value": 0.9,
                     "random": true
                 },
                 "size": {
-                    "value": 15,
+                    "value": 4,
                     "random": true
                 },
                 "move": {
                     "enable": true,
-                    "speed": 2,
-                    
-                    "out_mode": "out"
+                    "speed": 1,
+                    "straight": false,
+                    "direction": "none",
+                    "out_mode": "bounce"
                 }
             },
             "interactivity": {
@@ -65,11 +63,29 @@
                 "events": {
                     "onhover": {
                         "enable": true,
-                        "mode": "repulse"
+                        "mode": "bubble"
                     },
                     "onclick": {
                         "enable": true,
-                        "mode": "push"
+                        "mode": "repulse"
+                    }
+                }
+            },
+            "polygon": {
+                "enable": true,
+                "type": "inline",
+                "move": {
+                    "radius": 10
+                },
+                "scale": 1,
+                "url": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Heart_icon_red_hollow.svg",
+                "inline": {
+                    "arrangement": "equidistant"
+                },
+                "draw": {
+                    "enable": true,
+                    "stroke": {
+                        "color": "rgba(255, 0, 0, 0.8)"
                     }
                 }
             }

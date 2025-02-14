@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Heart of Particles</title>
     <style>
         body {
@@ -28,39 +28,42 @@
 </head>
 <body>
     <script>
-        // Функция для формирования координат сердца
+        // Формула для координат сердца
         function heartShape(t) {
             const x = 16 * Math.pow(Math.sin(t), 3);
-            const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t); // Стандартная формула для сердца
+            const y = 13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t);
             return { x, y };
         }
 
-        // Генерация частиц внутри сердца
+        // Функция генерации частиц
         function generateParticles() {
-            const totalParticles = 2000; // Количество частиц
+            const totalParticles = 1000; // Количество частиц
             const particlesContainer = document.body;
 
+            // Генерация частиц вдоль контура сердца
             for (let i = 0; i < totalParticles; i++) {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 particlesContainer.appendChild(particle);
 
-                // Генерация случайного угла для создания частиц по всему объему сердца
-                const t = Math.random() * Math.PI * 2; // Случайный угол от 0 до 2π
+                // Генерация случайного угла для создания частиц
+                const t = Math.random() * Math.PI * 2; // случайное значение угла от 0 до 2π
                 const { x, y } = heartShape(t);
 
-                // Масштабируем координаты для лучшего отображения
+                // Масштабируем координаты для отображения на экране
                 const offsetX = (x * 10) + window.innerWidth / 2;
                 const offsetY = (y * 10) + window.innerHeight / 2;
 
-                // Устанавливаем позицию частицы на экране
+                // Устанавливаем позицию частицы
                 particle.style.left = `${offsetX}px`;
                 particle.style.top = `${offsetY}px`;
             }
         }
 
         // Запуск генерации частиц после загрузки страницы
-        window.onload = generateParticles;
+        window.onload = function() {
+            generateParticles();
+        };
     </script>
 </body>
 </html>

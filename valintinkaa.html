@@ -1,143 +1,57 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Разбивающиеся сердца</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: linear-gradient(45deg, #ff6b6b, #ff8e8e);
-      overflow: hidden;
-    }
-
-    .container {
-      position: relative;
-      width: 300px;
-      height: 200px;
-    }
-
-    .heart {
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      background-color: red;
-      transform: rotate(45deg);
-      top: 50%;
-      transition: all 2s ease-in-out;
-    }
-
-    .heart::before,
-    .heart::after {
-      content: '';
-      position: absolute;
-      width: 80px;
-      height: 80px;
-      background-color: red;
-      border-radius: 50%;
-    }
-
-    .heart::before {
-      top: -40px;
-      left: 0;
-    }
-
-    .heart::after {
-      left: -40px;
-      top: 0;
-    }
-
-    .heart.left {
-      left: 0;
-      animation: moveLeftHeart 3s forwards ease-in-out;
-    }
-
-    .heart.right {
-      right: 0;
-      animation: moveRightHeart 3s forwards ease-in-out;
-    }
-
-    @keyframes moveLeftHeart {
-      0% { transform: translateX(0) rotate(45deg); }
-      50% { transform: translateX(100px) rotate(45deg); }
-      100% { transform: translateX(130px) scale(0) rotate(45deg); }
-    }
-
-    @keyframes moveRightHeart {
-      0% { transform: translateX(0) rotate(45deg); }
-      50% { transform: translateX(-100px) rotate(45deg); }
-      100% { transform: translateX(-130px) scale(0) rotate(45deg); }
-    }
-
-    /* Частицы после разрушения сердец */
-    .particles {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      opacity: 0;
-    }
-
-    .particle {
-      position: absolute;
-      width: 6px;
-      height: 6px;
-      background: red;
-      border-radius: 50%;
-      opacity: 0;
-      transform: scale(0);
-    }
-
-    /* Анимация разлета частиц */
-    @keyframes explode {
-      0% { transform: scale(1) translate(0, 0); opacity: 1; }
-      100% { transform: scale(0.5) translate(var(--x), var(--y)); opacity: 0; }
-    }
-
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Анимация Сердца</title>
+    <script src="https://cdn.jsdelivr.net/npm/nextparticle@latest"></script>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+        img {
+            display: none;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <div class="heart left"></div>
-    <div class="heart right"></div>
-    <div class="particles"></div>
-  </div>
+    <!-- Изображение, которое будет использоваться для частиц -->
+    <img id="valentines" src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Red_heart_icon.svg/768px-Red_heart_icon.svg.png">
 
-  <script>
-    const leftHeart = document.querySelector('.heart.left');
-    const rightHeart = document.querySelector('.heart.right');
-    const particlesContainer = document.querySelector('.particles');
+    <script>
+        // Настройки анимации
+        const settings = {
+            particleGap: 2,      // Плотность частиц
+            particleSize: 1.5,   // Размер частиц
+            mouseForce: 50,      // Влияние мыши
+            noise: 15,           // Случайное движение частиц
+            layerCount: 3,       // Количество слоев
+            layerDistance: 5     // Расстояние между слоями
+        };
 
-    // Создаём частицы
-    for (let i = 0; i < 50; i++) {
-      let particle = document.createElement('div');
-      particle.classList.add('particle');
-      let angle = Math.random() * 2 * Math.PI;
-      let distance = Math.random() * 100 + 20;
-      particle.style.setProperty('--x', `${Math.cos(angle) * distance}px`);
-      particle.style.setProperty('--y', `${Math.sin(angle) * distance}px`);
-      particlesContainer.appendChild(particle);
-    }
+        // Создаем анимацию с частицами
+        const heart = new NextParticle({
+            renderer: 'webgl',
+            image: document.querySelector('#valentines'),
+            width: window.innerWidth,
+            height: window.innerHeight,
+            particleGap: settings.particleGap,
+            particleSize: settings.particleSize,
+            mouseForce: settings.mouseForce,
+            noise: settings.noise,
+            layerCount: settings.layerCount,
+            layerDistance: settings.layerDistance
+        });
 
-    setTimeout(() => {
-      leftHeart.style.opacity = '0';
-      rightHeart.style.opacity = '0';
-      particlesContainer.style.opacity = '1';
-
-      document.querySelectorAll('.particle').forEach(p => {
-        p.style.animation = 'explode 1s forwards ease-out';
-        p.style.opacity = '1';
-      });
-    }, 3000);
-  </script>
+        // Автоматическое обновление размеров при изменении окна
+        window.addEventListener('resize', () => {
+            heart.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
 
 </body>
 </html>
+

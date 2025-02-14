@@ -1,90 +1,78 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Сердце из частиц</title>
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <title>Heart Particles</title>
     <style>
         body {
             margin: 0;
+            padding: 0;
             overflow: hidden;
-            background-color: black;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #000;
         }
-        #particles-js {
+
+        .particle {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 10px;
+            height: 10px;
+            background-color: red;
+            border-radius: 50%;
+            animation: move 3s infinite;
+        }
+
+        @keyframes move {
+            0% {
+                transform: scale(1) translate(0, 0);
+            }
+            100% {
+                transform: scale(0) translate(var(--x), var(--y));
+            }
+        }
+
+        .heart {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
     </style>
 </head>
 <body>
 
-    <div id="particles-js"></div>
+<div class="heart"></div>
 
-    <script>
-        particlesJS("particles-js", {
-            "particles": {
-                "number": {
-                    "value": 500, 
-                    "density": {
-                        "enable": true,
-                        "value_area": 800
-                    }
-                },
-                "color": {
-                    "value": "#ff0000" // Красный цвет частиц
-                },
-                "shape": {
-                    "type": "circle"
-                },
-                "opacity": {
-                    "value": 0.7,
-                    "random": true
-                },
-                "size": {
-                    "value": 4,
-                    "random": true
-                },
-                "move": {
-                    "enable": true,
-                    "speed": 1,
-                    "straight": false,
-                    "direction": "none",
-                    "out_mode": "bounce"
-                }
-            },
-            "polygon": {
-                "enable": true,
-                "type": "inside",
-                "move": {
-                    "radius": 10
-                },
-                "scale": 1,
-                "url": "",
-                "inline": {
-                    "arrangement": "equidistant"
-                },
-                "draw": {
-                    "enable": true,
-                    "stroke": {
-                        "color": "rgba(255, 0, 0, 0.8)"
-                    }
-                },
-                "path": {
-                    "enable": true,
-                    "fill": true,
-                    "fillColor": "#ff0000",
-                    "fillOpacity": 0.6,
-                    "pathData": "M 250,200 Q 150,100 150,200 Q 150,300 250,350 Q 350,300 350,200 Q 350,100 250,200 Z"
-                }
-            }
-        });
-    </script>
+<script>
+    function generateHeartParticles() {
+        const heartShape = [
+            { x: 0, y: -80 },
+            { x: 50, y: -50 },
+            { x: 100, y: 0 },
+            { x: 50, y: 50 },
+            { x: 0, y: 100 },
+            { x: -50, y: 50 },
+            { x: -100, y: 0 },
+            { x: -50, y: -50 }
+        ];
+
+        const particlesContainer = document.querySelector('.heart');
+
+        for (let i = 0; i < 100; i++) {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+
+            const randomShape = heartShape[Math.floor(Math.random() * heartShape.length)];
+            particle.style.setProperty('--x', `${randomShape.x + (Math.random() * 20 - 10)}px`);
+            particle.style.setProperty('--y', `${randomShape.y + (Math.random() * 20 - 10)}px`);
+
+            particlesContainer.appendChild(particle);
+        }
+    }
+
+    generateHeartParticles();
+</script>
 
 </body>
 </html>
